@@ -5,6 +5,11 @@ const fixtures = require('../main/fixtures');
 const parseQuantityFromBarcode = main.parseQuantityFromBarcode;
 const parseBoughtItemsCodeListToCodeAndQuantity = main.parseBoughtItemsCodeListToCodeAndQuantity;
 const getBoughtItemsListByBarcodes = main.getBoughtItemsListByBarcodes;
+const getSubTotalWithBuyTwoGetOneFree = main.getSubTotalWithBuyTwoGetOneFree;
+const isPromotedItem = main.isPromotedItem;
+const getSubTotalByPromotions = main.getSubTotalByPromotions;
+const constructQuantityString = main.constructQuantityString;
+const getReceiptInfoWithPromotion = main.getReceiptInfoWithPromotion;
 const loadAllItems = fixtures.loadAllItems;
 const loadPromotions = fixtures.loadPromotions;
 
@@ -103,3 +108,139 @@ describe('getBoughtItemsListByBarcodes', () => {
     expect(getBoughtItemsListByBarcodes(input_2, loadAllItems())).toEqual(expected_output_2);
   });
 });
+
+describe('getSubTotalWithBuyTwoGetOneFree', () => {
+  let item = {
+              barcode: 'ITEM000000',
+              name: 'Coca-Cola',
+              unit: 'bottle',
+              price: 3.00
+             };
+
+  it ('Given an item and the quantity of it when pass to getSubTotalWithBuyTwoGetOneFree(), then return its subtotal price under buy two get one free promotion.', () => {
+    expect(getSubTotalWithBuyTwoGetOneFree(item, 10)).toBe(21);
+  });
+});
+
+describe('isPromotedItem', () => {
+  let promotedItem = {
+                      barcode: 'ITEM000000',
+                      name: 'Coca-Cola',
+                      unit: 'bottle',
+                      price: 3.00
+                    };
+  let notPrmotedItem = {
+                        barcode: 'ITEM000004',
+                        name: 'Battery',
+                        unit: 'box',
+                        price: 2.00
+                       };
+
+  it ('Given a promoted item when pass to isPromotedItem(), then return true.', () => {
+    expect(isPromotedItem(promotedItem, loadPromotions()[0].barcodes)).toBe(true);
+  });
+
+  it ('Given a not promoted item when pass to isPromotedItem(), then return false.', () => {
+    expect(isPromotedItem(notPrmotedItem, loadPromotions()[0].barcodes)).toBe(false);
+  });  
+});
+
+describe('getSubTotalByPromotions', () => {
+  let promotedItem = {
+                      barcode: 'ITEM000000',
+                      name: 'Coca-Cola',
+                      unit: 'bottle',
+                      price: 3.00
+                    };
+  let notPrmotedItem = {
+                        barcode: 'ITEM000004',
+                        name: 'Battery',
+                        unit: 'box',
+                        price: 2.00
+                       };
+
+  it ('Given a promoted item when pass to getSubTotalByPromotions(), then return its subtotal price under promotion.', () => {
+    expect(getSubTotalByPromotions(promotedItem, 10, loadPromotions())).toBe(21);
+  });
+
+  it ('Given a not promoted item when pass to getSubTotalByPromotions(), then return its subtotal price under promotion.', () => {
+    expect(getSubTotalByPromotions(notPrmotedItem, 10, loadPromotions())).toBe(20);
+  });  
+})
+
+describe('getSubTotalByPromotions', () => {
+  it ('Given a countable unit and quantity as 1 when pass to getSubTotalByPromotions(), then return the quantity string without s', () => {
+    expect(constructQuantityString(1.00, 'bottle')).toBe('1 bottle');
+  });
+
+  it ('Given a countable unit and quantity as 3 when pass to getSubTotalByPromotions(), then return the quantity string with s', () => {
+    expect(constructQuantityString(3, 'bottle')).toBe('3 bottles');
+  });
+
+  it ('Given an uncountable unit and quantity as 1 when pass to getSubTotalByPromotions(), then return the quantity string without s', () => {
+    expect(constructQuantityString(1, 'kg')).toBe('1 kg');
+  });
+
+  it ('Given an uncountable unit and quantity as 3.25 when pass to getSubTotalByPromotions(), then return the quantity string without s', () => {
+    expect(constructQuantityString(3.25, 'kg')).toBe('3.25 kg');
+  });
+})
+
+describe('getReceiptInfoWithPromotion', () => {
+  let expected_input_1 = [
+                            {
+                              item: {
+                                      barcode: 'ITEM000001',
+                                      name: 'Sprite',
+                                      unit: 'bottle',
+                                      price: 3.00
+                                    },
+                              quantity: 6
+                            },
+                            {
+                              item: {
+                                      barcode: 'ITEM000002',
+                                      name: 'Apple',
+                                      unit: 'kg',
+                                      price: 5.50
+                                    },
+                              quantity: 3.3
+                            },
+                            {
+                              item: {
+                                      barcode: 'ITEM000005',
+                                      name: 'Noodles',
+                                      unit: 'bag',
+                                      price: 4.50
+                                    },
+                              quantity: 2
+                            },
+                          ];
+  let expected_output_1 = {
+                            boughtItemsInfo: [{
+                                                name: 'Sprite',
+                                                quantity: '6 bottles',
+                                                unitPrice: 3.00,
+                                                subTotal: 12.00
+                                              },
+                                              {
+                                                name: 'Apple',
+                                                quantity: '3.3 kg',
+                                                unitPrice: 5.50,
+                                                subTotal: 18.15
+                                              },
+                                              {
+                                                name: 'Noodles',
+                                                quantity: '2 bags',
+                                                unitPrice: 4.50,
+                                                subTotal: 9.00
+                                              }],
+                            total: 39.15,
+                            save: 6.00
+                          };
+
+
+  it ('Given a promoted item when pass to getReceiptInfoWithPromotion(), then return its subtotal price under promotion.', () => {
+    expect(getReceiptInfoWithPromotion(expected_input_1, loadPromotions())).toEqual(expected_output_1);
+  });
+})

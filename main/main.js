@@ -35,9 +35,29 @@ function parseQuantityFromBarcode(barcode){
 	return barcode.includes('-') ? Number(barcode.split('-')[1]) : 1;
 }
 
+function getReceiptInfoWithPromotion(boughtItemsList, promotionsInfo){
+}
+
+function constructQuantityString(quantity, unit){
+}
+
+function getSubTotalByPromotions(item, quantity, promotionsInfo){
+}
+
+function getSubTotalWithBuyTwoGetOneFree(item, quantity){
+}
+
+function isPromotedItem(item, promotionBarcodesList){
+}
+
 module.exports = {
 	printReceipt,
 	parseQuantityFromBarcode,
 	parseBoughtItemsCodeListToCodeAndQuantity,
-	getBoughtItemsListByBarcodes
+	getBoughtItemsListByBarcodes,
+	getSubTotalWithBuyTwoGetOneFree,
+	isPromotedItem,
+	getSubTotalByPromotions,
+	constructQuantityString,
+	getReceiptInfoWithPromotion
 };
