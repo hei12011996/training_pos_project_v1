@@ -10,6 +10,7 @@ const isPromotedItem = main.isPromotedItem;
 const getSubTotalByPromotions = main.getSubTotalByPromotions;
 const constructQuantityString = main.constructQuantityString;
 const getReceiptInfoWithPromotion = main.getReceiptInfoWithPromotion;
+const getReceiptByReceiptInfo = main.getReceiptByReceiptInfo;
 const loadAllItems = fixtures.loadAllItems;
 const loadPromotions = fixtures.loadPromotions;
 
@@ -242,5 +243,62 @@ describe('getReceiptInfoWithPromotion', () => {
 
   it ('Given a promoted item when pass to getReceiptInfoWithPromotion(), then return its subtotal price under promotion.', () => {
     expect(getReceiptInfoWithPromotion(expected_input_1, loadPromotions())).toEqual(expected_output_1);
+  });
+})
+
+describe('getReceiptByReceiptInfo', () => {
+  let simpleReceiptInfo = {
+                      boughtItemsInfo: [{
+                                          name: 'Sprite',
+                                          quantity: '6 bottles',
+                                          unitPrice: 3.00,
+                                          subTotal: 12.00
+                                        }],
+                      total: 12.00,
+                      save: 6
+                    };
+  let complicatedReceiptInfo = {
+                      boughtItemsInfo: [{
+                                          name: 'Sprite',
+                                          quantity: '6 bottles',
+                                          unitPrice: 3.00,
+                                          subTotal: 12.00
+                                        },
+                                        {
+                                          name: 'Apple',
+                                          quantity: '3.3 kg',
+                                          unitPrice: 5.50,
+                                          subTotal: 18.15
+                                        },
+                                        {
+                                          name: 'Noodles',
+                                          quantity: '2 bags',
+                                          unitPrice: 4.50,
+                                          subTotal: 9.00
+                                        }],
+                      total: 39.15,
+                      save: 6.00
+                    };
+
+  let expected_receipt_string_1 = "***<store earning no money>Receipt ***\n";
+     expected_receipt_string_1 += "Name: Sprite, Quantity: 6 bottles, Unit price: 3.00 (yuan), Subtotal: 12.00 (yuan)\n";
+     expected_receipt_string_1 += "----------------------\n";
+     expected_receipt_string_1 += "Total: 12.00 (yuan)\n";
+     expected_receipt_string_1 += "Saving: 6.00 (yuan)\n";
+
+  let expected_receipt_string_2 = "***<store earning no money>Receipt ***\n";
+     expected_receipt_string_2 += "Name: Sprite, Quantity: 6 bottles, Unit price: 3.00 (yuan), Subtotal: 12.00 (yuan)\n";
+     expected_receipt_string_2 += "Name: Apple, Quantity: 3.3 kg, Unit price: 5.50 (yuan), Subtotal: 18.15 (yuan)\n";
+     expected_receipt_string_2 += "Name: Noodles, Quantity: 2 bags, Unit price: 4.50 (yuan), Subtotal: 9.00 (yuan)\n";
+     expected_receipt_string_2 += "----------------------\n";
+     expected_receipt_string_2 += "Total: 39.15 (yuan)\n";
+     expected_receipt_string_2 += "Saving: 6.00 (yuan)\n";
+
+  it ('Given a receipt info with only one item when pass to getReceiptByReceiptInfo(), then return the correct receipt string.', () => {
+    expect(getReceiptByReceiptInfo(simpleReceiptInfo)).toEqual(expected_receipt_string_1);
+  });
+
+  it ('Given a receipt info with multiple items when pass to getReceiptByReceiptInfo(), then return the correct receipt string.', () => {
+    expect(getReceiptByReceiptInfo(complicatedReceiptInfo)).toEqual(expected_receipt_string_2);
   });
 })

@@ -84,6 +84,9 @@ function isPromotedItem(item, promotionBarcodesList){
 	return promotionBarcodesList.includes(item.barcode);
 }
 
+function getReceiptByReceiptInfo(receiptInfo){
+}
+
 module.exports = {
 	printReceipt,
 	parseQuantityFromBarcode,
@@ -93,5 +96,6 @@ module.exports = {
 	isPromotedItem,
 	getSubTotalByPromotions,
 	constructQuantityString,
-	getReceiptInfoWithPromotion
+	getReceiptInfoWithPromotion,
+	getReceiptByReceiptInfo
 };
