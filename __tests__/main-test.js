@@ -178,6 +178,10 @@ describe('getSubTotalByPromotions', () => {
     expect(constructQuantityString(3, 'bottle')).toBe('3 bottles');
   });
 
+  it ('Given unit as box and quantity as 3 when pass to getSubTotalByPromotions(), then return the quantity string with es', () => {
+    expect(constructQuantityString(3, 'box')).toBe('3 boxes');
+  });
+
   it ('Given an uncountable unit and quantity as 1 when pass to getSubTotalByPromotions(), then return the quantity string without s', () => {
     expect(constructQuantityString(1, 'kg')).toBe('1 kg');
   });

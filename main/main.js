@@ -57,6 +57,8 @@ function getReceiptInfoWithPromotion(boughtItemsList, promotionsInfo){
 function constructQuantityString(quantity, unit){
 	if (unit === 'bottle' || unit === 'bag'){
 		return quantity > 1 ? quantity + ' ' + unit + 's' : quantity + ' ' + unit;
+	} else if (unit === 'box'){
+		return quantity > 1 ? quantity + ' ' + unit + 'es' : quantity + ' ' + unit;
 	}
 	return quantity + ' ' + unit;
 }
