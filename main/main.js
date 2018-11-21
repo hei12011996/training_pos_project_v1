@@ -36,6 +36,22 @@ function parseQuantityFromBarcode(barcode){
 }
 
 function getReceiptInfoWithPromotion(boughtItemsList, promotionsInfo){
+	let total = 0;
+	let save = 0;
+	boughtItemsList = boughtItemsList.map(element => {
+		let item = element.item;
+		let quantity = element.quantity;
+		let subTotal = getSubTotalByPromotions(item, quantity, promotionsInfo);
+		total += subTotal;
+		save += item.price * quantity - subTotal;
+		return {
+							name: item.name,
+							quantity: constructQuantityString(quantity, item.unit),
+							unitPrice: item.price,
+							subTotal: subTotal
+					 };
+	})
+	return {boughtItemsInfo: boughtItemsList, total: total, save: save};
 }
 
 function constructQuantityString(quantity, unit){
