@@ -11,6 +11,7 @@ const getSubTotalByPromotions = main.getSubTotalByPromotions;
 const constructQuantityString = main.constructQuantityString;
 const getReceiptInfoWithPromotion = main.getReceiptInfoWithPromotion;
 const getReceiptByReceiptInfo = main.getReceiptByReceiptInfo;
+const printReceipt = main.printReceipt;
 const loadAllItems = fixtures.loadAllItems;
 const loadPromotions = fixtures.loadPromotions;
 
@@ -304,5 +305,43 @@ describe('getReceiptByReceiptInfo', () => {
 
   it ('Given a receipt info with multiple items when pass to getReceiptByReceiptInfo(), then return the correct receipt string.', () => {
     expect(getReceiptByReceiptInfo(complicatedReceiptInfo)).toEqual(expected_receipt_string_2);
+  });
+})
+
+describe('printReceipt', () => {
+  let boughtItemsCodeListWithOnlyOneCode = ['ITEM000000'];
+  let boughtItemsCodeListWithMultipleCodes = ['ITEM000005', 'ITEM000005', 'ITEM000005', 'ITEM000005'];
+  let boughtItemsCodeListWithWeightedCode = ['ITEM000001-6', 'ITEM000004', 'ITEM000004', 'ITEM000005'];
+
+  let expected_receipt_string_1 = "***<store earning no money>Receipt ***\n";
+     expected_receipt_string_1 += "Name: Coca-Cola, Quantity: 1 bottle, Unit price: 3.00 (yuan), Subtotal: 3.00 (yuan)\n";
+     expected_receipt_string_1 += "----------------------\n";
+     expected_receipt_string_1 += "Total: 3.00 (yuan)\n";
+     expected_receipt_string_1 += "Saving: 0.00 (yuan)\n";
+
+  let expected_receipt_string_2 = "***<store earning no money>Receipt ***\n";
+     expected_receipt_string_2 += "Name: Noodles, Quantity: 4 bags, Unit price: 4.50 (yuan), Subtotal: 13.50 (yuan)\n";
+     expected_receipt_string_2 += "----------------------\n";
+     expected_receipt_string_2 += "Total: 13.50 (yuan)\n";
+     expected_receipt_string_2 += "Saving: 4.50 (yuan)\n";
+
+  let expected_receipt_string_3 = "***<store earning no money>Receipt ***\n";
+     expected_receipt_string_3 += "Name: Sprite, Quantity: 6 bottles, Unit price: 3.00 (yuan), Subtotal: 12.00 (yuan)\n";
+     expected_receipt_string_3 += "Name: Battery, Quantity: 2 boxes, Unit price: 2.00 (yuan), Subtotal: 4.00 (yuan)\n";
+     expected_receipt_string_3 += "Name: Noodles, Quantity: 1 bag, Unit price: 4.50 (yuan), Subtotal: 4.50 (yuan)\n";
+     expected_receipt_string_3 += "----------------------\n";
+     expected_receipt_string_3 += "Total: 20.50 (yuan)\n";
+     expected_receipt_string_3 += "Saving: 6.00 (yuan)\n";
+
+  it ('Given a barcode list with only one item when pass to printReceipt(), then return the correct receipt string.', () => {
+    expect(printReceipt(boughtItemsCodeListWithOnlyOneCode)).toEqual(expected_receipt_string_1);
+  });
+
+  it ('Given a receipt info with multiple items when pass to getReceiptByReceiptInfo(), then return the correct receipt string.', () => {
+    expect(printReceipt(boughtItemsCodeListWithMultipleCodes)).toEqual(expected_receipt_string_2);
+  });
+
+  it ('Given a receipt info with multiple items containing weighted code when pass to getReceiptByReceiptInfo(), then return the correct receipt string.', () => {
+    expect(printReceipt(boughtItemsCodeListWithWeightedCode)).toEqual(expected_receipt_string_3);
   });
 })
