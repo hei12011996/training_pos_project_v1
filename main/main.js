@@ -48,6 +48,7 @@ function getSubTotalWithBuyTwoGetOneFree(item, quantity){
 }
 
 function isPromotedItem(item, promotionBarcodesList){
+	return promotionBarcodesList.includes(item.barcode);
 }
 
 module.exports = {
