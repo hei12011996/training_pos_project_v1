@@ -9,8 +9,11 @@ function printReceipt(boughtItemsCodeList){
 }
 
 function getBoughtItemsListByBarcodes(boughtItemsCodeList, allItemsList){
-	// let boughtItemsCodeAndQuantityMap = parseBoughtItemsCodeListToCodeAndQuantity(boughtItemsCodeList);
-	// return Object.keys(boughtItemsCodeAndQuantityMap).map(barcode => {});
+	let boughtItemsCodeAndQuantityMap = parseBoughtItemsCodeListToCodeAndQuantity(boughtItemsCodeList);
+	return Object.keys(boughtItemsCodeAndQuantityMap).map(barcode => {
+		let parsedBarcode = barcode.split('-')[0];
+		return {'item': allItemsList.find(item => item.barcode === parsedBarcode), 'quantity': boughtItemsCodeAndQuantityMap[parsedBarcode]};
+	});
 }
 
 function parseBoughtItemsCodeListToCodeAndQuantity(boughtItemsCodeList){
@@ -35,5 +38,6 @@ function parseQuantityFromBarcode(barcode){
 module.exports = {
 	printReceipt,
 	parseQuantityFromBarcode,
-	parseBoughtItemsCodeListToCodeAndQuantity
+	parseBoughtItemsCodeListToCodeAndQuantity,
+	getBoughtItemsListByBarcodes
 };
