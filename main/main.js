@@ -39,6 +39,10 @@ function getReceiptInfoWithPromotion(boughtItemsList, promotionsInfo){
 }
 
 function constructQuantityString(quantity, unit){
+	if (unit === 'bottle' || unit === 'bag'){
+		return quantity > 1 ? quantity + ' ' + unit + 's' : quantity + ' ' + unit;
+	}
+	return quantity + ' ' + unit;
 }
 
 function getSubTotalByPromotions(item, quantity, promotionsInfo){
