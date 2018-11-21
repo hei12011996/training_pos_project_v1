@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "url": "https://github.com/hei12011996/training_pos_project_v1/issues"
   },
   "homepage": "https://github.com/hei12011996/training_pos_project_v1#readme",
-  "dependencies": {
-    "jasmine-node": "^1.14.5"
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }
