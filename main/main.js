@@ -4,8 +4,10 @@ const loadAllItems = fixtures.loadAllItems;
 const loadPromotions = fixtures.loadPromotions;
 
 function printReceipt(boughtItemsCodeList){
-	let allItemsList = loadAllItems();
-	return 1;
+	let boughtItemsList = getBoughtItemsListByBarcodes(boughtItemsCodeList, loadAllItems());
+	let receiptInfo = getReceiptInfoWithPromotion(boughtItemsList, loadPromotions());
+	let receipt = getReceiptByReceiptInfo(receiptInfo);
+	return receipt;
 }
 
 function getBoughtItemsListByBarcodes(boughtItemsCodeList, allItemsList){
